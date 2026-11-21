@@ -13,7 +13,7 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.codec.StreamCodec;
 import net.minecraft.network.protocol.common.custom.CustomPacketPayload;
 import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -33,7 +33,7 @@ public final class GrappleHookHandler {
 
     public record HighJumpPayload() implements CustomPacketPayload {
         public static final Type<HighJumpPayload> TYPE = new Type<>(
-                ResourceLocation.fromNamespaceAndPath(ExampleMod.MOD_ID, "high_jump")
+                Identifier.fromNamespaceAndPath(ExampleMod.MOD_ID, "high_jump")
         );
         public static final StreamCodec<FriendlyByteBuf, HighJumpPayload> CODEC =
                 StreamCodec.unit(new HighJumpPayload());
@@ -46,7 +46,7 @@ public final class GrappleHookHandler {
 
     public record DashPayload() implements CustomPacketPayload {
         public static final Type<DashPayload> TYPE = new Type<>(
-                ResourceLocation.fromNamespaceAndPath(ExampleMod.MOD_ID, "dash")
+                Identifier.fromNamespaceAndPath(ExampleMod.MOD_ID, "dash")
         );
         public static final StreamCodec<FriendlyByteBuf, DashPayload> CODEC =
                 StreamCodec.unit(new DashPayload());
@@ -60,8 +60,8 @@ public final class GrappleHookHandler {
     private GrappleHookHandler() {}
 
     public static void register() {
-        PayloadTypeRegistry.playC2S().register(HighJumpPayload.TYPE, HighJumpPayload.CODEC);
-        PayloadTypeRegistry.playC2S().register(DashPayload.TYPE, DashPayload.CODEC);
+        PayloadTypeRegistry.serverboundPlay().register(HighJumpPayload.TYPE, HighJumpPayload.CODEC);
+        PayloadTypeRegistry.serverboundPlay().register(DashPayload.TYPE, DashPayload.CODEC);
 
         ServerPlayNetworking.registerGlobalReceiver(HighJumpPayload.TYPE, (payload, context) ->
                 context.server().execute(() -> performHighJump(context.player())));
