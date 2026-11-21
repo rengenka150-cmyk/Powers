@@ -50,7 +50,6 @@ public final class GrappleHookHandler {
             }
 
             Vec3 direction = delta.normalize();
-            // Импульс в сторону точки зацепа + лёгкий подброс вверх, чтобы не цепляться ногами за уступы
             double speed = Math.min(PULL_SPEED + distance * 0.025, 2.35);
             Vec3 velocity = new Vec3(
                     direction.x * speed,
@@ -59,7 +58,7 @@ public final class GrappleHookHandler {
             );
 
             serverPlayer.setDeltaMovement(velocity);
-            serverPlayer.hurtMarked = true;
+            serverPlayer.hasImpulse = true;
             serverPlayer.resetFallDistance();
             serverPlayer.getCooldowns().addCooldown(stack, COOLDOWN_TICKS);
 
