@@ -2,6 +2,7 @@ package com.example;
 
 import net.fabricmc.fabric.api.event.player.UseItemCallback;
 import net.minecraft.core.particles.ParticleTypes;
+import net.minecraft.network.protocol.game.ClientboundSetEntityMotionPacket;
 import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.sounds.SoundEvents;
@@ -58,7 +59,7 @@ public final class GrappleHookHandler {
             );
 
             serverPlayer.setDeltaMovement(velocity);
-            serverPlayer.hasImpulse = true;
+            serverPlayer.connection.send(new ClientboundSetEntityMotionPacket(serverPlayer));
             serverPlayer.resetFallDistance();
             serverPlayer.getCooldowns().addCooldown(stack, COOLDOWN_TICKS);
 
